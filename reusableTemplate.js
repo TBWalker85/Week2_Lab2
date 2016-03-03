@@ -7,11 +7,20 @@ var library = (function(){
 
 		// Collections --- Complete Functions Below
 		each : function(list, iterator) {
-            for (i = 0; i < iterator.length; i++);
-            return iterator(list[i]);
+            for (i = 0; i < iterator.length; i++) {
+            iterator(list[i], i, list);
+            };
         },
 
-		filter : function(list, test) {},
+		filter : function(list, test) {
+            var results = [];
+            for (var i = 0; i < list.length; i++) {
+                if (list[i] > test) {
+                    results.push(list[i]);
+                }
+            }
+            return results;
+        },
 
 		reject : function(list, test) {},
 
