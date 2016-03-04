@@ -7,29 +7,37 @@ var library = (function(){
 
 		// Collections --- Complete Functions Below
 		each : function(list, iterator) {
-            for (i = 0; i < iterator.length; i++) {
-            iterator(list[i], i, list);
-            };
+            if (Array.isArray(list)) {
+                for (var i = 0; i < list.length; i++) {
+                iterator(list[i], i, list);
+                }
+            } else {
+                for (var key in list) {
+                  iterator(list[key], key, list);  
+                }
+            }
         },
 
 		filter : function(list, test) {
-            var results = [];
-            for (var i = 0; i < list.length; i++) {
-                if (list[i] > test) {
-                    results.push(list[i]);
-                }
-            }
-            return results;
+            // var results = [];
+            // for (var i = 0; i < list.length; i++) {
+            //     if () {
+            //         results.push(list[i]);
+            //     }
+            // }
+            // return results;
         },
 
 		reject : function(list, test) {},
 
 		map : function(list, iterator) {
-            // var results = [];
-            // for (var i = 0; i < list.length; i++) {
-            //     results.push(list[i]);
-            // }
-            return results;
+            var results = [];
+            if (Array.isArray(list)) {
+                for (var i = 0; i < list.length; i++) {
+                results = iterator(list[i]);
+                return results;
+                }
+            }
         },
 
 		pluck : function(list, key) {
@@ -38,12 +46,38 @@ var library = (function(){
 			});
 		},
 		reduce : function(list, iterator, accumulator) {
-            
+            if (accumulator === undefined){
+                accumulator = list[0];
+            }
+            this.each(list, function(item) {
+                accumulator = iterator(accumulator, item);
+            });
+            return accumulator;
         },
 
-		every : function(list, iterator) {},
+		every : function(list, iterator) {
+            if (iterator === undefined) {
+                iterator = this.identity;
+            }
+            for (var i = 0; i < list.length; i++) {
+                if (iterator(list[i]) == false) {
+                    return false;
+                }
+            }
+            return true;
+        },
 
-		some : function(list, iterator) {},
+		some : function(list, iterator) {
+            if (iterator === undefined) {
+                iterator = this.identity;
+            }
+            for (var i = 0; i < list.length; i++) {
+                if (iterator(list[i])) {
+                    return true;
+                }
+            }
+            return false;
+        },
 
 		contains : function(list, target) {},
 
